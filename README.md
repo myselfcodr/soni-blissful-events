@@ -3,7 +3,7 @@
 =======
 # 🏟️ Soni Blissful Events - Sports Club Management System
 
-**Live Site:** [Soni Blissful Events Live View](https://test-elite-arena.netlify.app)
+**Live Site:** [Soni Blissful Events Live View](https://netlify.app)
 
 ---
 
@@ -98,9 +98,8 @@ If you want to run this project on your local machine:
 ### Step 1: Clone both repositories
 
 ```bash
-git clone https://github.com/touhidtamim/elite-arena-client-side
-git clone https://github.com/touhidtamim/elite-arena-server-side
-```
+git clone https://github.com/myselfcodr/soni-blissful-events.git
+git clone https://github.com/myselfcodr/soni-blissful-events.git
 
 ### Step 2: Setup Backend (Server)
 
@@ -127,10 +126,10 @@ Your app will be running locally at: `http://localhost:5173`
 ## 🔗 Repository Links
 
 **Backend (Server) Repository:**  
-https://github.com/touhidtamim/elite-arena-server-side
+https://github.com/myselfcodr/soni-blissful-events.git
 
 **Frontend (Client) Repository:**  
-https://github.com/touhidtamim/elite-arena-client-side
+https://github.com/myselfcodr/soni-blissful-events.git
 
 ---
 
@@ -138,17 +137,14 @@ https://github.com/touhidtamim/elite-arena-client-side
 
 Use the following credentials to log in as an admin:
 
-```
-Email: admin@elitearena.com
-Password: Abc123
+``` user login put gmail or password 
+    if admin so call Ashish
 ```
 
 ---
 
-## 👤 Developed By
+## 👤 Developed By **Ashish Nishad**  
 
-**Touhid Tamim**  
-`WEB11-3318` | Programming Hero Web Development Course (Batch 11)
 
 ---
 
