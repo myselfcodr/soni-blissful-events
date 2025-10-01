@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://soni-blissful-events-backend.onrender.com," // Replace with your backend URL
+  baseURL: "https://soni-blissful-events-backend.onrender.com, // Replace with your backend URL
 });
 
 // Request interceptor to add JWT token automatically
