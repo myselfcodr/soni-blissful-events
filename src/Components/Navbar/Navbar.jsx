@@ -100,6 +100,7 @@ const Navbar = () => {
     { name: "Gallery", path: "/gallery" },
     { name: "Refer & Discounts", path: "/Membership" },
     { name: "Dashboard", path: "/dashboard" },
+    { name: "About Us", path: "/about" },
   ];
 
   const navLinks = user ? navLinksLoggedIn : navLinksLoggedOut;
