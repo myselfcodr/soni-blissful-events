@@ -3,7 +3,7 @@
 =======
 # 🏟️ Soni Blissful Events Management System
 
-**Live Site:** [Soni Blissful Events Live View](https://netlify.app)
+**Live Site:** [Soni Blissful Events Live View](https://soniblissfulevents.in/)
 
 ---
 
