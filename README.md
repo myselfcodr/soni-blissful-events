@@ -72,7 +72,7 @@ Traditional Events often rely on manual systems—spreadsheets, paper registrati
 - Node.js
 - Express.js
 - MongoDB (Mongoose)
-- Stripe Payment Integration
+- MongoDB (Mongoose)
 - CORS, Dotenv, JWT, and other middleware
 
 ---
