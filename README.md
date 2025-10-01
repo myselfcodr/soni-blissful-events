@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 # soni-blissful-events
 =======
-# 🏟️ Soni Blissful Events - Sports Club Management System
+# 🏟️ Soni Blissful Events Management System
 
 **Live Site:** [Soni Blissful Events Live View](https://netlify.app)
 
