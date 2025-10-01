@@ -9,22 +9,22 @@
 
 ## 📝 Project Overview
 
-Soni Blissful Events is a professional-grade Sports Club Management System built to modernize and simplify how sports clubs operate. From member registration to court bookings, announcements to payments—Soni Blissful Events provides a fully digitized ecosystem for managing day-to-day club activities with ease and efficiency.
+Soni Blissful Events is a professional Management System built to modernize and simplify how clubs operate. From member registration to bookings, announcements to payments—Soni Blissful Events provides a fully digitized ecosystem for managing day-to-day club activities with ease and efficiency.
 
 ---
 
 ## 🎯 Target Audience
 
-- Sports club admins and managers
-- Enthusiasts seeking court/session bookings
-- Club members tracking their events and payments
+- Events Club admins and managers
+- Enthusiasts seeking events/session bookings
+- Events manager tracking their events and payments
 - New users looking to register or explore sports facilities
 
 ---
 
 ## ❓ Problem We Solved
 
-Traditional sports clubs often rely on manual systems—spreadsheets, paper registrations, in-person payments, and no centralized member management. These create friction, mismanagement, and poor user experience.
+Traditional Events often rely on manual systems—spreadsheets, paper registrations, in-person payments, and no centralized member management. These create friction, mismanagement, and poor user experience.
 
 **Soni Blissful Events solves this by offering:**
 
@@ -45,8 +45,8 @@ Traditional sports clubs often rely on manual systems—spreadsheets, paper regi
 - 📢 **Live Announcement Panel** – Admins can publish and manage club-wide announcements
 - 🎟️ **Coupon Management** – Create, edit, and delete discount codes for promotional usage
 - 👤 **Profile Management** – View and update user details, booking history, and membership status
-- 🗺️ **Branch Locator with Map** – Displays 30+ Soni Blissful Events locations across Raipur, Chhattisgarh with maps and details
-- 📸 **Gallery & Events Wall** – Explore club highlights, memories, and past event glimpses in a stunning layout
+- 🗺️ **Branch Locator with Map** – Displays Soni Blissful Events locations across Raipur, Chhattisgarh with maps and details
+- 📸 **Gallery & Events Wall** – Explore Events highlights, memories, and past event glimpses in a stunning layout
 - 🔄 **Auto-Membership Conversion** – Converts users to members automatically after booking approval
 - 📨 **Secure Contact Form** – Allows users to reach out with inquiries directly from the website
 - 🌐 **Responsive Design** – Fully mobile-friendly interface for seamless experience across all devices
@@ -65,8 +65,6 @@ Traditional sports clubs often rely on manual systems—spreadsheets, paper regi
 - TanStack Query
 - Axios (with JWT interceptor)
 - Firebase Auth
-- 
-
 - Imgbb API
 
 ### 🧩 Backend
