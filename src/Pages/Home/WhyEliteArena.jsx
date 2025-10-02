@@ -133,7 +133,7 @@ const WhyEliteArena = () => {
           {[
             { number: "500+ Happy Clients", label: "Families & Corporates Who Loved Our Events" },
             { number: "200+ Perfectly Executed Events", label: "Smooth Planning Every Time" },
-            { number: "50+ Exclusive & Premium Experiences", label: "Tailored for Memorable Moments" },
+            { number: "50+ Premium Experiences", label: "Tailored for Memorable Moments" },
             { number: "10+ Events Monthly", label: "Consistently Delivering Excellence" },
           ].map((item, index) => (
             <div
