@@ -35,7 +35,7 @@ const FeaturedEventBanner = () => {
 
               {/* Main image */}
               <img
-                src="https://images.unsplash.com/photo-1542751371-adc38448a05e"
+                src="FeaturedEventImg/id1.jpg"
                 alt="Elite Championship"
                 className="w-full h-full object-cover object-center"
                 loading="eager"
