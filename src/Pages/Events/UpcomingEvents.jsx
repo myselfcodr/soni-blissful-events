@@ -2,12 +2,12 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const events = [
-  {
+    {
     title: "Birthday Banquet",
     date: "A Day to Remember",
     location: "Raipur, Chhattisgarh",
     description: "खुशियों से भरा एक जन्मदिन — गुब्बारे, केक और ढेर सारी यादें।",
-    image: null,
+    image: "/UpcomingEventsImg/id1.png", 
     category: "Birthday Celebration",
   },
   {
@@ -15,7 +15,7 @@ const events = [
     date: "A Magical Afternoon",
     location: "Raipur, Chhattisgarh",
     description: "छोटी सी जगह पर भी बड़ा जश्न — प्यारा सा डेकोर और ढेर सारी मुस्कानें।",
-    image: null,
+    image: "/UpcomingEventsImg/id2.png", 
     category: "Birthday Celebration",
   },
   {
@@ -23,7 +23,7 @@ const events = [
     date: "A Fairytale Evening",
     location: "Raipur, Chhattisgarh",
     description: "शादी के हर पल को खास बनाने वाली सजावट — सपनों जैसा माहौल।",
-    image: null,
+    image: "/UpcomingEventsImg/id3.jpg", 
     category: "Wedding Special",
   },
   {
@@ -31,7 +31,7 @@ const events = [
     date: "Elegant Celebration",
     location: "Raipur, Chhattisgarh",
     description: "ऑफिस की पार्टियों से लेकर मीटिंग्स तक — प्रोफेशनल डेकोर का सही चुनाव।",
-    image: null,
+    image: "/UpcomingEventsImg/id4.webp", 
     category: "Corporate Event",
   },
   {
@@ -39,7 +39,7 @@ const events = [
     date: "A Day of Joy",
     location: "Raipur, Chhattisgarh",
     description: "नन्हे मेहमान के स्वागत से पहले — प्यार और उम्मीदों से सजी शाम।",
-    image: null,
+    image: "/UpcomingEventsImg/id5.jpg", 
     category: "Baby Shower",
   },
   {
@@ -47,7 +47,7 @@ const events = [
     date: "A Heartwarming Morning",
     location: "Raipur, Chhattisgarh",
     description: "घर आया नन्हा मेहमान — रंग-बिरंगी सजावट और खुशियों का स्वागत।",
-    image: null,
+    image:"/UpcomingEventsImg/id6.jpg", 
     category: "Baby Celebration",
   },
   {
@@ -55,7 +55,7 @@ const events = [
     date: "A Romantic Evening",
     location: "Raipur, Chhattisgarh",
     description: "सालों का साथ, एक खास दिन — रोमांटिक सजावट और खूबसूरत यादें।",
-    image: null,
+    image: "/UpcomingEventsImg/id7.jpg", 
     category: "Anniversary Celebration",
   },
   {
@@ -63,7 +63,7 @@ const events = [
     date: "A Magical Surprise",
     location: "Raipur, Chhattisgarh",
     description: "बिना बताए किया गया सरप्राइज — झिलमिल लाइट्स और ढेर सारी खुशियाँ।",
-    image: null,
+    image: "/UpcomingEventsImg/id8.jpg", 
     category: "Exclusive Surprise",
   },
   {
@@ -71,7 +71,7 @@ const events = [
     date: "A Fun-filled Evening",
     location: "Raipur, Chhattisgarh",
     description: "फन गेम्स और पार्टी मूड के साथ सजी हुई रंगीन शाम।",
-    image: null,
+    image: "/UpcomingEventsImg/id9.jpg", 
     category: "Theme Party",
   }
 ];

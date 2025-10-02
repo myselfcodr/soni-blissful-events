@@ -31,10 +31,10 @@ const TermsAndConditions = () => {
             </h2>
             <p>By registering for an Soni Blissful Events membership, you agree to:</p>
             <ul className="list-disc pl-6 mt-2 space-y-2">
-              <li>Provide accurate and complete information</li>
-              <li>Pay all fees on time</li>
+              <li>Provide accurate and complete information during booking</li>
+              <li>Pay all deposits and fees within the agreed timelines</li>
               <li>Follow all facility rules and regulations</li>
-              <li>Use equipment properly and safely</li>
+              <li>Understand that your booking is only confirmed once payment/deposit is received</li>
             </ul>
           </div>
 
@@ -43,10 +43,11 @@ const TermsAndConditions = () => {
               2. Payments & Cancellations
             </h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Membership fees are non-refundable</li>
-              <li>Auto-renewal can be canceled 7 days before renewal date</li>
-              <li>Late payments may result in service suspension</li>
-              <li>Annual memberships require 30-day notice for cancellation</li>
+              <li>Advance Deposit: A non-refundable deposit is required to secure bookings</li>
+              <li>Full Payment: Must be completed before the event date (as agreed in contract/invoice)</li>
+              <li>Cancellations by Client: Cancellations made less than 15 days before the event are non-refundable</li>
+              <li>Rescheduling: Subject to availability and may incur additional charges</li>
+              <li>Cancellations by Us: If we must cancel due to unavoidable reasons, a full refund will be issued</li>
             </ul>
           </div>
 
@@ -56,9 +57,9 @@ const TermsAndConditions = () => {
             </h2>
             <p>Members must:</p>
             <ul className="list-disc pl-6 mt-2 space-y-2">
-              <li>Wipe down equipment after use</li>
-              <li>Use proper athletic attire</li>
-              <li>Not misuse or damage equipment</li>
+              <li>Provide timely approvals for event plans, designs, and vendor arrangements</li>
+              <li>Not misuse or damage event property, décor, or equipment</li>
+              <li>Follow venue rules and cooperate with our team and partners</li>
               <li>Follow staff instructions at all times</li>
             </ul>
           </div>
@@ -68,9 +69,11 @@ const TermsAndConditions = () => {
               4. Health & Safety
             </h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Consult a physician before beginning any exercise program</li>
-              <li>Use equipment at your own risk</li>
-              <li>Report any injuries immediately</li>
+              <li>We prioritize guest safety but are not liable for personal
+                 injuries, accidents, or illnesses during the event</li>
+              <li>Clients must inform us of any special requirements 
+                (e.g., food allergies, safety concerns) in advance</li>
+              <li>Fire safety, permits, and local laws must be respected at all times</li>
               <li>Soni Blissful Events is not liable for personal injuries</li>
             </ul>
           </div>
@@ -79,12 +82,12 @@ const TermsAndConditions = () => {
             <h2 className="text-2xl font-bold mb-4 text-yellow-400">
               5. Code of Conduct
             </h2>
-            <p>Prohibited behaviors include:</p>
+            <p>Harassment of staff, vendors, or guests</p>
             <ul className="list-disc pl-6 mt-2 space-y-2">
               <li>Harassment of other members or staff</li>
-              <li>Use of performance-enhancing substances</li>
-              <li>Unauthorized personal training</li>
-              <li>Commercial photography without permission</li>
+              <li>Use of illegal substances or disruptive behavior</li>
+              <li>Unauthorized photography/videography in restricted areas</li>
+              <li>Activities that may cause damage to property or reputation</li>
             </ul>
           </div>
 
@@ -93,8 +96,9 @@ const TermsAndConditions = () => {
               6. Intellectual Property
             </h2>
             <p>
-              All Soni Blissful Events logos, training programs, and content are
-              proprietary and may not be reproduced without written permission.
+              All logos, designs, themes, content, and marketing materials of Soni Blissful Events 
+              are our intellectual property and may not be copied, resold, or reproduced without written
+              permission.
             </p>
           </div>
 
@@ -103,9 +107,9 @@ const TermsAndConditions = () => {
               7. Limitation of Liability
             </h2>
             <p>
-              Soni Blissful Events is not responsible for lost or stolen items. We
-              reserve the right to refuse service to anyone violating these
-              terms.
+              We are not responsible for lost, stolen, or damaged personal belongings during events
+              Our liability is limited to the amount paid for the specific booking/service
+              We reserve the right to refuse service to anyone violating these terms
             </p>
           </div>
 
@@ -114,8 +118,8 @@ const TermsAndConditions = () => {
               8. Changes to Terms
             </h2>
             <p>
-              We may modify these terms at any time. Continued use of our
-              services constitutes acceptance of the new terms.
+              We may update these Terms & Conditions at any time. Continued use of our 
+              services implies acceptance of the revised terms.
             </p>
           </div>
 
@@ -124,8 +128,8 @@ const TermsAndConditions = () => {
               9. Governing Law
             </h2>
             <p>
-              These terms are governed by the laws of Raipur, Chhattisgarh. Any disputes
-              will be resolved in Dhaka courts.
+              These terms shall be governed by the laws of Raipur, Chhattisgarh, India.
+              Any disputes will be subject to the jurisdiction of courts in Raipur.
             </p>
           </div>
         </motion.div>

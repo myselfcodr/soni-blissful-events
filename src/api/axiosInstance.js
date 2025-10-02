@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://soni-blissful-events-backend.onrender.com",
+  // baseURL:"http://localhost:5000", // Replace with your backend URL
 });
 
 // Request interceptor to add JWT token automatically

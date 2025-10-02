@@ -30,10 +30,11 @@ const PrivacyPolicy = () => {
               1. Introduction
             </h2>
             <p>
-              Soni Blissful Events ("we," "our," or "us") is committed to protecting your
-              privacy. This Privacy Policy explains how we collect, use,
-              disclose, and safeguard your information when you visit our
-              website or use our services.
+             Soni Blissful Events ("we," "our," or "us") values your privacy
+              and is committed to protecting your personal information. This 
+              Privacy Policy explains how we collect, use, disclose, and safeguard
+              your data when you visit our website, book our services, or participate 
+              in our events.
             </p>
           </div>
 
@@ -52,11 +53,12 @@ const PrivacyPolicy = () => {
                 visited
               </li>
               <li>
-                <strong>Health Data:</strong> Medical conditions (for fitness
-                programs)
+                <strong>Event Preferences:</strong>Theme choices,
+                 booking requirements, and customization requests.
               </li>
               <li>
-                <strong>Cookies:</strong> To enhance user experience
+                <strong>Cookies:</strong> Used to enhance browsing 
+                experience and personalize services.
               </li>
             </ul>
           </div>
@@ -80,9 +82,10 @@ const PrivacyPolicy = () => {
               4. Data Security
             </h2>
             <p>
-              We implement industry-standard security measures including
-              encryption, access controls, and secure servers. However, no
-              method of transmission over the Internet is 100% secure.
+              We implement industry-standard safeguards, including:
+              Encrypted transactions
+              Secure servers and firewalls
+              Restricted data access to authorized personnel only
             </p>
           </div>
 
@@ -90,12 +93,14 @@ const PrivacyPolicy = () => {
             <h2 className="text-2xl font-bold mb-4 text-yellow-400">
               5. Third-Party Sharing
             </h2>
-            <p>We may share information with:</p>
+            <p>We may share your information only when necessary, including with:</p>
             <ul className="list-disc pl-6 mt-2 space-y-2">
-              <li>Payment processors</li>
-              <li>Fitness equipment providers</li>
+              <li>Payment Gateways: To securely process your transactions</li>
+              <li>Trusted Vendors/Partners:
+                 (e.g., decorators, venues, catering, equipment providers) 
+                 required to deliver your booked services</li>
               <li>Marketing partners (with consent)</li>
-              <li>Legal authorities when required</li>
+              <li>Legal Authorities: If required by law or to protect our rights</li>
             </ul>
           </div>
 
@@ -117,8 +122,8 @@ const PrivacyPolicy = () => {
               7. Changes to This Policy
             </h2>
             <p>
-              We may update this policy periodically. We will notify you of any
-              changes by posting the new policy on this page.
+            We may update this Privacy Policy from time to time.
+            Any changes will be posted on this page with a revised “Last Updated” date.
             </p>
           </div>
 
@@ -127,9 +132,9 @@ const PrivacyPolicy = () => {
               8. Contact Us
             </h2>
             <p>
-              For questions about this policy, contact us at:
+             If you have questions about this Privacy Policy or how your information is handled, please contact us:
               <br />
-              <span className="text-yellow-400">privacy@elitearena.com</span>
+              <span className="text-yellow-400">soniblissfulevents@gmail.com</span>
             </p>
           </div>
         </motion.div>
