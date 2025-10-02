@@ -51,7 +51,7 @@ const DashboardLayouts = () => {
         {/* Mobile header */}
         <header className="lg:hidden sticky top-0 z-20 bg-gray-900 p-4 flex items-center justify-between">
           <h1 className="text-white font-serif font-semibold">
-            Soni<span className="text-yellow-400">Blissful</span> Dashboard
+            Soni<span className="text-yellow-400"> Blissful</span> Events Dashboard
           </h1>
           <button
             className="menu-button text-white p-1"
