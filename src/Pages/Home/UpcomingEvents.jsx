@@ -4,19 +4,18 @@ const events = [
   {
     title: "Birthday's Decorations",
     date: "Tomorrow",
-    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018",
+    image: "/EventsImg/id 2.png",
   },
   {
     title: "Wedding's Decorations",
     date: "Tomorrow",
     image:
-      "https://i.postimg.cc/jd895LQD/premium-photo-1733342490554-4bcb4c60631e-q-80-w-1170-auto-format-fit-crop-ixlib-rb-4-1.jpg",
-  },
+      "/EventsImg/id1.jpg",},
   {
     title: "Aniversaries Decorations",
     date: "Tomorrow",
     image:
-      "https://i.postimg.cc/nrFRVJXK/photo-1691272472455-885135750a94-q-80-w-1087-auto-format-fit-crop-ixlib-rb-4-1.jpg",
+      "/EventsImg/id3.png",
   },
 ];
 
