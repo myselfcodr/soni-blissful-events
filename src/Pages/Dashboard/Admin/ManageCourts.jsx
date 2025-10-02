@@ -248,7 +248,7 @@ const ManageCourts = () => {
             className="px-4 sm:px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition flex items-center justify-center gap-2"
           >
             <FaEdit />
-            Add New Court
+            Add New Event
           </button>
 
           <select
