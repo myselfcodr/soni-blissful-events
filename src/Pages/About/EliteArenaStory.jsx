@@ -61,7 +61,7 @@ const EliteArenaStory = () => {
       >
         <motion.img
           variants={fadeUpVariant}
-          src="/EventsImg/id5.png"
+          src="/MomentsImg/id1.jpg"
           alt="Soni Blissful Events Facility"
           className="rounded-xl shadow-2xl w-full h-auto object-cover"
         />
