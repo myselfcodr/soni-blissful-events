@@ -1,33 +1,45 @@
+// src/Components/Banner/Banner.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
-
-const slides = [
-  { id: 1, title: "Birthdays", image: "/BannerImg/slide-1.webp", link: "/events/birthdays" },
-  { id: 2, title: "Weddings", image: "/BannerImg/slide-2.webp", link: "/events/weddings" },
-  { id: 3, title: "Anniversaries", image: "/BannerImg/slide-3.webp", link: "/events/anniversaries" },
-  { id: 4, title: "Baby Showers", image: "/BannerImg/slide-4.webp", link: "/events/baby-showers" },
-  { id: 5, title: "Corporate Events", image: "/BannerImg/slide-5.webp", link: "/events/corporate" },
-  { id: 6, title: "Social Gatherings", image: "/BannerImg/slide-6.webp", link: "/events/social" },
-  { id: 7, title: "Festivals & Parties", image: "/BannerImg/slide-7.webp", link: "/events/festivals" },
-];
+import api from "../../api/axiosInstance";
+import { toast } from "react-toastify";
 
 const Banner = () => {
+  const [slides, setSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState(1);
   const touchStartX = useRef(0);
   const shouldReduceMotion = useReducedMotion();
 
-  // Auto-advance
   useEffect(() => {
+    fetchSlides();
+  }, []);
+
+  const fetchSlides = async () => {
+    try {
+      const response = await api.get('/banners');
+      if (response.data && response.data.length > 0) {
+        setSlides(response.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching banners:', error);
+      toast.error('Failed to load banner slides');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (slides.length === 0) return;
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
-  // Swipe handlers
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -50,16 +62,31 @@ const Banner = () => {
     setCurrentSlide(index);
   };
 
+  if (loading) {
+    return (
+      <section className="relative bg-gray-950 pt-16 min-h-[60vh] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-yellow-400"></div>
+      </section>
+    );
+  }
+
+  if (slides.length === 0) {
+    return (
+      <section className="relative bg-gray-950 pt-16 min-h-[60vh] flex items-center justify-center">
+        <div className="text-center text-gray-400">
+          <p className="text-xl">No banner slides available</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section 
       className="relative bg-gray-950 pt-16"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Main Carousel Container */}
       <div className="relative w-full">
-        
-        {/* Image Container - Full Width with Aspect Ratio */}
         <div className="relative w-full bg-gray-900">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -77,24 +104,21 @@ const Banner = () => {
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="absolute inset-0 w-full h-full flex items-center justify-center"
             >
-              {/* Full Image with object-contain for complete visibility */}
               <img
                 src={slides[currentSlide].image}
                 alt={slides[currentSlide].title}
                 className="w-full h-full object-contain"
-                style={{
-                  maxHeight: '70vh',
-                }}
+                style={{ maxHeight: '70vh' }}
                 loading={currentSlide === 0 ? "eager" : "lazy"}
+                onError={(e) => {
+                  e.target.src = "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1470&q=80";
+                }}
               />
             </motion.div>
           </AnimatePresence>
-
-          {/* Aspect Ratio Container - Maintains space */}
           <div className="relative w-full" style={{ paddingTop: '56.25%' }} />
         </div>
 
-        {/* Content Section Below Image */}
         <div className="relative bg-gray-950 px-6 py-6">
           <motion.div
             key={`content-${currentSlide}`}
@@ -103,19 +127,15 @@ const Banner = () => {
             transition={{ delay: 0.2 }}
             className="max-w-4xl mx-auto space-y-4"
           >
-            {/* Title - Smaller Size */}
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
               {slides[currentSlide].title}
             </h2>
-
-            {/* CTA Button - Smaller Size */}
             <Link
-              to={slides[currentSlide].link}
+              to={slides[currentSlide].link || "/events"}
               className="inline-flex items-center gap-2 px-6 py-3
                         bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600
                         text-gray-900 text-sm font-semibold rounded-full
-                        active:scale-95 transition-all
-                        shadow-lg"
+                        active:scale-95 transition-all shadow-lg"
             >
               <span>Book Now</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +145,6 @@ const Banner = () => {
           </motion.div>
         </div>
 
-        {/* Navigation Dots */}
         <div className="relative bg-gray-950 pb-6 px-6">
           <div className="flex justify-center gap-2">
             {slides.map((_, index) => (

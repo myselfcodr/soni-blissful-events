@@ -13,6 +13,8 @@ import { MdCampaign, MdOutlineManageAccounts } from "react-icons/md";
 import { AuthContext } from "../../Provider/AuthProvider";
 import useUserRole from "../../hooks/useUserRole";
 
+import { FaImage, FaEdit } from "react-icons/fa";
+
 const allNavItems = [
   {
     name: "Overview",
@@ -96,6 +98,18 @@ const allNavItems = [
     name: "Manage Announcement",
     path: "/dashboard/announcements/manage",
     icon: <MdOutlineManageAccounts />,
+    roles: ["admin"],
+  },
+  {
+    name: "Manage Banners",
+    path: "/dashboard/banners",
+    icon: <FaImage />,
+    roles: ["admin"],
+  },
+  {
+    name: "Add Banner",
+    path: "/dashboard/banners/add",
+    icon: <FaEdit />,
     roles: ["admin"],
   },
 ];

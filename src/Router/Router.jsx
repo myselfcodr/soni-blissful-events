@@ -17,6 +17,7 @@ import PrivacyPolicy from "../Components/Legal/PrivacyPolicy";
 import TermsAndConditions from "../Components/Legal/TermsAndConditions";
 
 import PrivateRouter from "./PrivateRouter";
+import React, { Suspense } from "react";
 
 // Dashboard pages
 import AddCourtPage from "../Pages/Dashboard/Admin/AddCourtPage";
@@ -35,6 +36,9 @@ import ConfirmBookings from "../Pages/Dashboard/Member/ConfirmBookings";
 import ManageBookings from "../Pages/Dashboard/Admin/ManageBookings";
 import PaymentHistory from "../Pages/Dashboard/Member/PaymentHistory";
 import Overview from "../Pages/Dashboard/Shared/Overview/overview";
+
+const AddBanner = React.lazy(() => import("../Pages/Dashboard/Admin/AddBanner.jsx"));
+const ManageBanners = React.lazy(() => import("../Pages/Dashboard/Admin/ManageBanners.jsx"));
 
 const Router = createBrowserRouter([
   {
@@ -75,11 +79,12 @@ const Router = createBrowserRouter([
       { path: "bookings/confirm", element: <ConfirmBookings /> },
       { path: "bookings/manage", element: <ManageBookings /> },
       { path: "users", element: <AllUsers /> },
-      { path: "coupons/manage", element: <ManageCoupons /> },
-      { path: "payments/history", element: <PaymentHistory /> },
+  { path: "banners/add", element: <Suspense fallback={<div>Loading...</div>}><AddBanner /></Suspense> },
+  { path: "banners", element: <Suspense fallback={<div>Loading...</div>}><ManageBanners /></Suspense> },
       { path: "announcements", element: <Announcements /> },
-      { path: "announcements/manage", element: <ManageAnnouncement /> },
-      { path: "payment/:bookingId", element: <PaymentPage /> },
+  { path: "announcements/manage", element: <ManageAnnouncement /> },
+  // Removed invalid import expressions; use React.lazy and Suspense above instead.
+  { path: "payment/:bookingId", element: <PaymentPage /> },
     ],
   },
 ]);
