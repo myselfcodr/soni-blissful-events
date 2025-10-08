@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <h1>I am Elite </h1>
+      <h1>I am Aman Soni </h1>
     </>
   );
 }

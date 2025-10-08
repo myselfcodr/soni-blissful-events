@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom"; // Assuming react-router-dom is used
+
+// Assuming you have some auth context or prop to check if user is admin
+// For demo, we'll use a state, but in real app, use Firebase Auth or context
+const isAdmin = true; // Replace with actual auth check, e.g., from Firebase
 
 const eventTypes = ["All", "Upcoming", "Ongoing", "Featured", "Past Glory"];
 
@@ -11,7 +15,21 @@ const EventWall = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch events from public/events.json
+  // New states for admin adding functionality
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    id: "",
+    type: "Upcoming",
+    title: "",
+    date: "",
+    venue: "",
+    highlight: "",
+    status: "",
+    image: "",
+    aspect: "portrait" // default
+  });
+
+  // Fetch events from public/events.json (or backend)
   useEffect(() => {
     fetch("/events.json")
       .then((res) => res.json())
@@ -39,6 +57,46 @@ const EventWall = () => {
         return "md:col-span-2";
       default:
         return "";
+    }
+  };
+
+  // Function to handle adding new event (admin only)
+  const handleAddEvent = (e) => {
+    e.preventDefault();
+    // In real app, upload to Firebase or backend here
+    // For demo, add to local state
+    const newId = events.length + 1;
+    setEvents([...events, { ...newEvent, id: newId }]);
+    setNewEvent({
+      id: "",
+      type: "Upcoming",
+      title: "",
+      date: "",
+      venue: "",
+      highlight: "",
+      status: "",
+      image: "",
+      aspect: "portrait"
+    });
+    setShowAddForm(false);
+    // TODO: Implement actual upload to server/Firestore
+  };
+
+  // Handle input changes for new event
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewEvent({ ...newEvent, [name]: value });
+  };
+
+  // Handle image upload (base64 for demo, use Firebase Storage in real)
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewEvent({ ...newEvent, image: reader.result });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -114,7 +172,111 @@ const EventWall = () => {
         </div>
       </motion.div>
 
-      {/* Events Grid */}
+      {/* Admin Add Button */}
+      {isAdmin && (
+        <div className="text-center mb-8">
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+          >
+            {showAddForm ? "Cancel" : "Add New Event"}
+          </button>
+        </div>
+      )}
+
+      {/* Admin Add Form */}
+      {isAdmin && showAddForm && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-7xl mx-auto bg-gray-800 p-6 rounded-lg mb-8"
+        >
+          <form onSubmit={handleAddEvent}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="title"
+                value={newEvent.title}
+                onChange={handleInputChange}
+                placeholder="Event Title"
+                className="p-2 bg-gray-700 text-white rounded"
+                required
+              />
+              <select
+                name="type"
+                value={newEvent.type}
+                onChange={handleInputChange}
+                className="p-2 bg-gray-700 text-white rounded"
+              >
+                {eventTypes.slice(1).map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="date"
+                name="date"
+                value={newEvent.date}
+                onChange={handleInputChange}
+                className="p-2 bg-gray-700 text-white rounded"
+                required
+              />
+              <input
+                type="text"
+                name="venue"
+                value={newEvent.venue}
+                onChange={handleInputChange}
+                placeholder="Venue"
+                className="p-2 bg-gray-700 text-white rounded"
+                required
+              />
+              <input
+                type="text"
+                name="highlight"
+                value={newEvent.highlight}
+                onChange={handleInputChange}
+                placeholder="Highlight Quote"
+                className="p-2 bg-gray-700 text-white rounded"
+                required
+              />
+              <input
+                type="text"
+                name="status"
+                value={newEvent.status}
+                onChange={handleInputChange}
+                placeholder="Status"
+                className="p-2 bg-gray-700 text-white rounded"
+                required
+              />
+              <select
+                name="aspect"
+                value={newEvent.aspect}
+                onChange={handleInputChange}
+                className="p-2 bg-gray-700 text-white rounded"
+              >
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+              </select>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="p-2 bg-gray-700 text-white rounded"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
+            >
+              Add Event
+            </button>
+          </form>
+        </motion.div>
+      )}
+
+      {/* Events Grid with Sliding Animation */}
       <div className="max-w-7xl mx-auto">
         {filteredEvents.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
@@ -122,101 +284,103 @@ const EventWall = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 auto-rows-[minmax(200px,auto)]">
-            {filteredEvents.map((event) => (
-              <motion.div
-                key={event.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true, margin: "0px 0px -50px 0px" }}
-                className={`relative group ${getAspectClass(event.aspect)}`}
-                onMouseEnter={() => setHoveredCard(event.id)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                {/* Event Card */}
-                <div className="h-full bg-gray-900 rounded-lg md:rounded-xl overflow-hidden border border-gray-800 hover:border-yellow-400 transition-all shadow-lg">
-                  {/* Image */}
-                  <div className="h-full w-full relative overflow-hidden">
-                    <motion.img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-full h-full object-cover"
-                      animate={{
-                        scale: hoveredCard === event.id ? 1.1 : 1,
-                      }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end">
-                    <div className="space-y-2 sm:space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-yellow-400 text-xs font-bold tracking-wider">
-                          {event.type.toUpperCase()}
-                        </span>
-                        <span className="text-gray-400 text-xs">
-                          {event.date}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg sm:text-xl font-bold text-white">
-                        {event.title}
-                      </h3>
-
-                      <p className="text-gray-300 text-xs sm:text-sm italic">
-                        "{event.highlight}"
-                      </p>
-
-                      <div className="flex items-center text-gray-400 text-xs">
-                        <svg
-                          className="w-3 h-3 sm:w-4 sm:h-4 mr-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                        {event.venue}
-                      </div>
-
-                      {/* Status */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
+            <AnimatePresence>
+              {filteredEvents.map((event) => (
+                <motion.div
+                  key={event.id}
+                  initial={{ opacity: 0, x: 100 }} // Slide in from right
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }} // Slide out to left
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className={`relative group ${getAspectClass(event.aspect)}`}
+                  onMouseEnter={() => setHoveredCard(event.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  {/* Event Card */}
+                  <div className="h-full bg-gray-900 rounded-lg md:rounded-xl overflow-hidden border border-gray-800 hover:border-yellow-400 transition-all shadow-lg">
+                    {/* Image with hover scale (existing) */}
+                    <div className="h-full w-full relative overflow-hidden">
+                      <motion.img
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
                         animate={{
-                          opacity: hoveredCard === event.id ? 1 : 0,
-                          y: hoveredCard === event.id ? 0 : 10,
+                          scale: hoveredCard === event.id ? 1.1 : 1,
                         }}
-                        className="pt-1 sm:pt-2"
-                      >
-                        <span
-                          className={`inline-block px-2 py-0.5 sm:px-3 sm:py-1 text-xs font-bold rounded-full ${
-                            event.type === "Past Glory"
-                              ? "bg-gray-800 text-gray-300"
-                              : "bg-yellow-400 text-black"
-                          }`}
+                        transition={{ duration: 0.5 }}
+                      />
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end">
+                      <div className="space-y-2 sm:space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-yellow-400 text-xs font-bold tracking-wider">
+                            {event.type.toUpperCase()}
+                          </span>
+                          <span className="text-gray-400 text-xs">
+                            {event.date}
+                          </span>
+                        </div>
+
+                        <h3 className="text-lg sm:text-xl font-bold text-white">
+                          {event.title}
+                        </h3>
+
+                        <p className="text-gray-300 text-xs sm:text-sm italic">
+                          "{event.highlight}"
+                        </p>
+
+                        <div className="flex items-center text-gray-400 text-xs">
+                          <svg
+                            className="w-3 h-3 sm:w-4 sm:h-4 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                          {event.venue}
+                        </div>
+
+                        {/* Status */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{
+                            opacity: hoveredCard === event.id ? 1 : 0,
+                            y: hoveredCard === event.id ? 0 : 10,
+                          }}
+                          className="pt-1 sm:pt-2"
                         >
-                          {event.status}
-                        </span>
-                      </motion.div>
+                          <span
+                            className={`inline-block px-2 py-0.5 sm:px-3 sm:py-1 text-xs font-bold rounded-full ${
+                              event.type === "Past Glory"
+                                ? "bg-gray-800 text-gray-300"
+                                : "bg-yellow-400 text-black"
+                            }`}
+                          >
+                            {event.status}
+                          </span>
+                        </motion.div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>

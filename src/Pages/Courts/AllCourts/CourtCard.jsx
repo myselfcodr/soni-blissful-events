@@ -1,127 +1,114 @@
-import { motion } from "framer-motion";
-import {
-  FaCalendarAlt,
-  FaClock,
-  FaUsers,
-  FaMapMarkerAlt,
-  FaStar,
-} from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 
-const CourtCard = ({ court, onBook }) => {
+const swipeConfidenceThreshold = 10000;
+
+const CourtCard = ({ court }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [containerHeight, setContainerHeight] = useState("300px");
+  const images =
+    court.images && court.images.length > 0
+      ? court.images
+      : [court.image || "/ImgPlaceholder/image-coming-soon-placeholder.webp"];
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      const width = window.innerWidth;
+      if (width < 640) setContainerHeight("220px");
+      else if (width < 768) setContainerHeight("270px");
+      else setContainerHeight("300px");
+    };
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(intervalRef.current);
+  }, [images.length]);
+
+  const paginate = (direction) => {
+    clearInterval(intervalRef.current);
+    setCurrentIndex(prev => {
+      const next = prev + direction;
+      if (next < 0) return images.length - 1;
+      if (next >= images.length) return 0;
+      return next;
+    });
+  };
+
   return (
     <motion.div
-      key={court.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 15, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="relative bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition-all duration-300 group
-             hover:shadow-md hover:border-yellow-400"
+      className="max-w-md mx-auto bg-white rounded-2xl border border-gray-200 shadow-sm select-none"
+      style={{
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.05)"
+      }}
     >
-      {/* Decorative Corners - Updated to match WhyEliteArena */}
-      <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-      {/* Image Section - No changes */}
-      <div className="h-48 overflow-hidden relative">
-        <img
-          src={
-            court.image || "/ImgPlaceholder/image-coming-soon-placeholder.webp"
-          }
-          alt={court.name}
-          onError={(e) =>
-            (e.target.src =
-              "/ImgPlaceholder/image-coming-soon-placeholder.webp")
-          }
-          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.img
+          key={currentIndex}
+          src={images[currentIndex]}
+          alt={`${court.name} - Image ${currentIndex + 1}`}
+          className="w-full h-[300px] object-cover rounded-t-2xl cursor-grab"
+          draggable={false}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={1}
+          dragSnapToOrigin
+          onDragEnd={(e, { offset, velocity }) => {
+            const swipe = Math.abs(offset.x) * velocity.x;
+            if (swipe < -swipeConfidenceThreshold) paginate(1);
+            else if (swipe > swipeConfidenceThreshold) paginate(-1);
+          }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.4 }}
+          onError={(e) => (e.target.src = "/ImgPlaceholder/image-coming-soon-placeholder.webp")}
         />
+      </AnimatePresence>
 
-        {/* Text Overlay - No changes */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-4 flex items-end justify-between text-white text-sm font-semibold">
-          <h3 className="text-lg font-bold truncate">{court.name}</h3>
-          <div className="flex gap-1 text-yellow-400 items-center text-xs bg-black/50 px-2 py-1 rounded-full">
-            {court.type}
-            {court.isPremium && (
-              <span className="ml-2 flex items-center bg-yellow-500/80 text-black font-bold px-2 py-0.5 rounded-full">
-                <FaStar className="text-xs mr-1" /> Premium
+      <div className="p-6 text-gray-900">
+        <h2 className="text-2xl font-semibold">{court.name}</h2>
+        {court.description && (
+          <p className="text-base mt-2 text-gray-700 line-clamp-3">{court.description}</p>
+        )}
+
+        {court.amenities && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {court.amenities.slice(0, 6).map((a, i) => (
+              <span
+                key={i}
+                className="bg-gray-100 text-gray-800 rounded-full px-3 py-1 text-xs font-semibold shadow-sm"
+                style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.1)" }}
+              >
+                {a}
+              </span>
+            ))}
+            {court.amenities.length > 6 && (
+              <span className="bg-gray-200 text-gray-600 rounded-full px-3 py-1 text-xs font-semibold shadow-sm">
+                +{court.amenities.length - 6} more
               </span>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Card Body - No changes */}
-      <div className="p-6 text-gray-800">
-        {/* Location */}
-        <div className="flex items-center text-sm mb-3 text-gray-700">
-          <FaMapMarkerAlt className="mr-1 text-yellow-500" />
-          <span>{court.location}</span>
-        </div>
-
-        {/* Description */}
-        <p className="text-sm mb-4 line-clamp-3 font-medium">
-          {court.description ||
-            "Premium quality court with excellent facilities for professional play."}
-        </p>
-
-        {/* Facilities */}
-        {court.amenities?.length > 0 && (
-          <div className="mb-4">
-            <h4 className="text-sm font-semibold mb-1 text-gray-800">
-              Facilities:
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {court.amenities.slice(0, 4).map((amenity, index) => (
-                <span
-                  key={index}
-                  className="text-xs bg-gray-200 px-2 py-1 rounded-full font-medium"
-                >
-                  {amenity}
-                </span>
-              ))}
-              {court.amenities.length > 4 && (
-                <span className="text-xs bg-gray-200 px-2 py-1 rounded-full font-medium">
-                  +{court.amenities.length - 4} more
-                </span>
-              )}
-            </div>
-          </div>
         )}
 
-        {/* Availability and Capacity */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="flex items-center text-sm text-gray-700">
-            <FaClock className="mr-2 text-yellow-500" />
-            <span>{court.availability} slots</span>
-          </div>
-          <div className="flex items-center text-sm text-gray-700">
-            <FaUsers className="mr-2 text-yellow-500" />
-            <span>Max {court.capacity}</span>
-          </div>
-        </div>
-
-        {/* Price and Book Button - No changes */}
-        <div className="flex justify-between items-center">
-          <div>
-            <span className="text-xs text-gray-500">Starting from</span>
-            <div className="text-lg font-bold text-gray-900">
-              ৳{court.rate}
-              <span className="text-sm font-normal text-gray-500">/hour</span>
-            </div>
-          </div>
-          <motion.button
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 0 15px rgba(250,204,21,0.7)",
-              transition: { duration: 0.3, ease: "easeOut" },
-            }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onBook(court)}
-            className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-lg transition-all shadow-md flex items-center"
-          >
-            <FaCalendarAlt className="mr-2" />
-            Book Now
-          </motion.button>
-        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => alert(`Booking your event for ${court.name}`)}
+          className="mt-6 w-full py-3 rounded-lg bg-yellow-400 text-yellow-900 font-semibold shadow-sm transition"
+          style={{ boxShadow: "0 2px 5px rgba(255,193,7,0.5)" }}
+        >
+          Book Now
+        </motion.button>
       </div>
     </motion.div>
   );

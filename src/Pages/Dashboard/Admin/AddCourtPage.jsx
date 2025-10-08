@@ -2,13 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import {
-  FaUpload,
-  FaMapMarkerAlt,
-  FaMoneyBillWave,
-  FaUsers,
-  FaCalendarAlt,
-} from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
 import api from "../../../api/axiosInstance";
 
 const AddCourtPage = () => {
@@ -19,43 +13,36 @@ const AddCourtPage = () => {
     reset,
   } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImages, setPreviewImages] = useState([]); // multiple images
 
-  const courtTypes = [
-    "Badminton",
-    "Tennis",
-    "Basketball",
-    "Volleyball",
-    "Futsal",
-    "Squash",
-    "Table Tennis",
-  ];
-
+  // ✅ Multiple Image Upload Handler
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    const files = Array.from(e.target.files);
+    const newPreviews = [];
+
+    files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewImage(reader.result);
+        newPreviews.push(reader.result);
+
+        if (newPreviews.length === files.length) {
+          setPreviewImages((prev) => [...prev, ...newPreviews]); // Append mode
+        }
       };
       reader.readAsDataURL(file);
-    }
+    });
   };
 
+  // ✅ Form Submit
   const onSubmit = async (data) => {
     setIsSubmitting(true);
 
     try {
       const payload = {
         name: data.name,
-        type: data.type,
-        location: data.location,
-        rate: Number(data.rate),
-        capacity: Number(data.capacity),
-        availability: data.availability,
         description: data.description || "",
         amenities: data.amenities || [],
-        image: previewImage || "",
+        images: previewImages || [], // send as array
       };
 
       const response = await api.post("/courts", payload);
@@ -63,7 +50,7 @@ const AddCourtPage = () => {
       if (response.status === 201) {
         toast.success("Court added successfully!");
         reset();
-        setPreviewImage(null);
+        setPreviewImages([]);
       } else {
         toast.error("Failed to add court. Please try again.");
       }
@@ -95,16 +82,15 @@ const AddCourtPage = () => {
 
         {/* Form Card */}
         <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-700">
-          {/* Form Header */}
           <div className="bg-gradient-to-r from-yellow-600 to-yellow-700 p-6">
             <h2 className="text-xl font-bold text-white">Court Information</h2>
           </div>
 
-          {/* Form Content */}
+          {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="p-4 sm:p-6 md:p-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {/* Court Name */}
-              <div className="sm:col-span-2 lg:col-span-3">
+              <div>
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-300 mb-1"
@@ -116,7 +102,7 @@ const AddCourtPage = () => {
                   type="text"
                   {...register("name", { required: "Court name is required" })}
                   className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                  placeholder="e.g. Center Court, Arena 1"
+                  placeholder="e.g. Celebration Hall"
                 />
                 {errors.name && (
                   <p className="mt-1 text-sm text-red-400">
@@ -125,200 +111,61 @@ const AddCourtPage = () => {
                 )}
               </div>
 
-              {/* Court Type */}
-              <div>
-                <label
-                  htmlFor="type"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
-                  Court Type *
-                </label>
-                <select
-                  id="type"
-                  {...register("type", { required: "Court type is required" })}
-                  className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                >
-                  <option value="">Select a court type</option>
-                  {courtTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-                {errors.type && (
-                  <p className="mt-1 text-sm text-red-400">
-                    {errors.type.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Location */}
-              <div>
-                <label
-                  htmlFor="location"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
-                  Location *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaMapMarkerAlt className="text-gray-400" />
-                  </div>
-                  <input
-                    id="location"
-                    type="text"
-                    {...register("location", {
-                      required: "Location is required",
-                    })}
-                    className="w-full pl-10 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                    placeholder="Court location"
-                  />
-                </div>
-                {errors.location && (
-                  <p className="mt-1 text-sm text-red-400">
-                    {errors.location.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Hourly Rate */}
-              <div>
-                <label
-                  htmlFor="rate"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
-                  Hourly Rate (৳) *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaMoneyBillWave className="text-gray-400" />
-                  </div>
-                  <input
-                    id="rate"
-                    type="number"
-                    {...register("rate", {
-                      required: "Hourly rate is required",
-                      min: { value: 0, message: "Rate must be positive" },
-                    })}
-                    className="w-full pl-10 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                    placeholder="500"
-                  />
-                </div>
-                {errors.rate && (
-                  <p className="mt-1 text-sm text-red-400">
-                    {errors.rate.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Capacity */}
-              <div>
-                <label
-                  htmlFor="capacity"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
-                  Player Capacity *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaUsers className="text-gray-400" />
-                  </div>
-                  <input
-                    id="capacity"
-                    type="number"
-                    {...register("capacity", {
-                      required: "Capacity is required",
-                      min: { value: 1, message: "Minimum capacity is 1" },
-                    })}
-                    className="w-full pl-10 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                    placeholder="4"
-                  />
-                </div>
-                {errors.capacity && (
-                  <p className="mt-1 text-sm text-red-400">
-                    {errors.capacity.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Availability */}
-              <div>
-                <label
-                  htmlFor="availability"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
-                  Availability *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaCalendarAlt className="text-gray-400" />
-                  </div>
-                  <select
-                    id="availability"
-                    {...register("availability", {
-                      required: "Availability is required",
-                    })}
-                    className="w-full pl-10 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                  >
-                    <option value="">Select availability</option>
-                    <option value="morning">Morning (6AM - 12PM)</option>
-                    <option value="afternoon">Afternoon (12PM - 6PM)</option>
-                    <option value="evening">Evening (6PM - 12AM)</option>
-                    <option value="full-day">Full Day (6AM - 12AM)</option>
-                  </select>
-                </div>
-                {errors.availability && (
-                  <p className="mt-1 text-sm text-red-400">
-                    {errors.availability.message}
-                  </p>
-                )}
-              </div>
-
               {/* Image Upload */}
-              <div className="sm:col-span-2 lg:col-span-3">
+              <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
-                  Court Image *
+                  Court Images *
                 </label>
-                <div className="mt-1 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="mt-1 flex flex-col gap-4">
                   <label
                     htmlFor="image-upload"
-                    className="cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg border border-gray-600 flex items-center transition-colors text-white"
+                    className="cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg border border-gray-600 flex items-center transition-colors text-white w-fit"
                   >
                     <FaUpload className="mr-2" />
-                    <span>Upload Image</span>
+                    <span>Upload Images</span>
                     <input
                       id="image-upload"
                       type="file"
                       accept="image/*"
-                      {...register("image", {
-                        required: "Court image is required",
+                      multiple // ✅ allow multiple
+                      {...register("images", {
+                        required: "At least one image is required",
                       })}
                       onChange={handleImageChange}
                       className="hidden"
                     />
                   </label>
-                  {previewImage && (
-                    <div className="flex-shrink-0">
-                      <img
-                        src={previewImage}
-                        alt="Court preview"
-                        className="h-24 w-24 object-cover rounded-lg border border-gray-600"
-                      />
+
+                  {/* Preview Images Grid */}
+                  {previewImages.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                      {previewImages.map((img, index) => (
+                        <div
+                          key={index}
+                          className="relative h-24 w-full rounded-lg border border-gray-600 overflow-hidden"
+                        >
+                          <img
+                            src={img}
+                            alt={`Preview ${index + 1}`}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
-                {errors.image && (
+                {errors.images && (
                   <p className="mt-1 text-sm text-red-400">
-                    {errors.image.message}
+                    {errors.images.message}
                   </p>
                 )}
                 <p className="mt-1 text-xs text-gray-400">
-                  Upload a high-quality image of the court (JPEG, PNG)
+                  Upload multiple high-quality images (JPEG, PNG)
                 </p>
               </div>
 
               {/* Description */}
-              <div className="sm:col-span-2 lg:col-span-3">
+              <div>
                 <label
                   htmlFor="description"
                   className="block text-sm font-medium text-gray-300 mb-1"
@@ -335,20 +182,17 @@ const AddCourtPage = () => {
               </div>
 
               {/* Amenities */}
-              <div className="sm:col-span-2 lg:col-span-3">
+              <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Amenities
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {[
                     "Lighting",
-                    "Sound System ",
+                    "Sound System",
                     "Parking Area",
-                    "Parking",
                     "Seating Arrangements",
                     "Refreshments",
-                    
-                    
                   ].map((amenity) => (
                     <div key={amenity} className="flex items-center">
                       <input
@@ -370,7 +214,7 @@ const AddCourtPage = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <div className="mt-8 flex justify-end">
               <motion.button
                 type="submit"

@@ -1,6 +1,6 @@
 import React from "react";
 import EventLandingHero from "./EventLandingHero";
-import FeaturedEventBanner from "./FeaturedEventBanner";
+// import FeaturedEventBanner from "./FeaturedEventBanner";
 import UpcomingEvents from "./UpcomingEvents";
 import JoinEventCTA from "./JoinEventCTA";
 import EventWall from "./EventWall";
@@ -10,7 +10,7 @@ const Events = () => {
     <div className="bg-white text-gray-800">
       <EventLandingHero />
       <EventWall />
-      <FeaturedEventBanner />
+      {/* <FeaturedEventBanner /> */}
       <UpcomingEvents />
       <JoinEventCTA />
     </div>
