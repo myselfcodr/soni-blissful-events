@@ -1,8 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL: "http://localhost:5000", // Use local backend for development
-  baseURL: "https://soni-blissful-events-backend.onrender.com", // Use for production
+  baseURL:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:5000"
+      : "https://soni-blissful-events-backend.onrender.com",
 });
 
 // Request interceptor to add JWT token automatically
