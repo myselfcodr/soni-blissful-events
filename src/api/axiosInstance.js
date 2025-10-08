@@ -2,9 +2,11 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:5000"
-      : "https://soni-blissful-events-backend.onrender.com",
+    import.meta.env && import.meta.env.VITE_API_BASE_URL
+      ? import.meta.env.VITE_API_BASE_URL
+      : (process.env.NODE_ENV === "development"
+          ? "http://localhost:5000"
+          : "https://soni-blissful-events-backend.onrender.com"),
 });
 
 // Request interceptor to add JWT token automatically
