@@ -106,15 +106,15 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link
+                {/* <Link
                   to="/events"
                   className="text-gray-400 hover:text-yellow-400 transition-colors"
                 >
                   Events
-                </Link>
+                </Link> */}
               </li>
               <li>
-                <Link
+                {/* <Link
                   to="/gallery"
                   className="text-gray-400 hover:text-yellow-400 transition-colors"
                 >
@@ -127,7 +127,7 @@ const Footer = () => {
                   className="text-gray-400 hover:text-yellow-400 transition-colors"
                 >
                   Membership
-                </Link>
+                </Link> */}
               </li>
               <li>
                 <Link
@@ -208,7 +208,7 @@ const Footer = () => {
             </ul>
           </motion.div>
 
-          {/* Newsletter */}
+          {/* Newsletter
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -235,7 +235,7 @@ const Footer = () => {
                 Subscribe
               </button>
             </form>
-          </motion.div>
+          </motion.div> */}
         </div>
 
         {/* Bottom Bar */}

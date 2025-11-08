@@ -86,19 +86,19 @@ const Navbar = () => {
 
   const navLinksLoggedOut = [
     { name: "Home", path: "/" },
-    { name: "Events", path: "/courts" },
-    { name: "Functions", path: "/events" },
-    { name: "Gallery", path: "/gallery" },
-    { name: "Referal", path: "/Membership" },
+    // { name: "Events", path: "/courts" },
+    // { name: "Functions", path: "/events" },
+    // { name: "Gallery", path: "/gallery" },
+    // { name: "Referal", path: "/Membership" },
     { name: "About Us", path: "/about" },
   ];
 
   const navLinksLoggedIn = [
     { name: "Home", path: "/" },
-    { name: "Events", path: "/courts" },
-    { name: "Functions", path: "/events" },
-    { name: "Gallery", path: "/gallery" },
-    { name: "Refer & Discounts", path: "/Membership" },
+    // { name: "Events", path: "/courts" },
+    // { name: "Functions", path: "/events" },
+    // { name: "Gallery", path: "/gallery" },
+    // { name: "Refer & Discounts", path: "/Membership" },
     { name: "Dashboard", path: "/dashboard" },
     { name: "About Us", path: "/about" },
   ];

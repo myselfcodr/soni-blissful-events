@@ -29,8 +29,8 @@ const CallToAction = () => {
             viewport={{ once: true }}
             className="text-xl text-gray-900 mb-8"
           >
-            चाहे जन्मदिन हो, शादी हो या सरप्राइज समारोह — यहाँ हर विचार के लिए जगह है।
-            आइए, आपके अगले इवेंट को सच में यादगार बनाएं।
+            [translate:चाहे जन्मदिन हो, शादी हो या सरप्राइज समारोह — यहाँ हर विचार के लिए जगह है।
+            आइए, आपके अगले इवेंट को सच में यादगार बनाएं।]
           </motion.p>
 
           <motion.div
@@ -39,13 +39,16 @@ const CallToAction = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
           >
-            <motion.button
+            <motion.a
+              href="https://api.whatsapp.com/send/?phone=918319594037&text&type=phone_number&app_absent=0"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-black hover:bg-gray-900 text-white font-medium py-3 px-8 rounded-full text-lg shadow-lg transition-all"
+              className="inline-block bg-black hover:bg-gray-900 text-white font-medium py-3 px-8 rounded-full text-lg shadow-lg transition-all"
             >
               अभी अपनी बुकिंग करें
-            </motion.button>
+            </motion.a>
           </motion.div>
         </motion.div>
       </div>
