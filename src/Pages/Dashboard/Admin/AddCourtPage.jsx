@@ -76,14 +76,14 @@ const AddCourtPage = () => {
             Add New Court
           </h1>
           <p className="mt-2 text-lg text-gray-400">
-            Fill in the details to add a new sports court to Soni Blissful Events
+            Fill in the details to add a Premium Events to Soni Blissful Events
           </p>
         </div>
 
         {/* Form Card */}
         <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-700">
           <div className="bg-gradient-to-r from-yellow-600 to-yellow-700 p-6">
-            <h2 className="text-xl font-bold text-white">Court Information</h2>
+            <h2 className="text-xl font-bold text-white">Events Information</h2>
           </div>
 
           {/* Form */}
@@ -95,7 +95,7 @@ const AddCourtPage = () => {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-300 mb-1"
                 >
-                  Court Name *
+                  Event Name *
                 </label>
                 <input
                   id="name"
@@ -114,7 +114,7 @@ const AddCourtPage = () => {
               {/* Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
-                  Court Images *
+                  Event Images *
                 </label>
                 <div className="mt-1 flex flex-col gap-4">
                   <label
