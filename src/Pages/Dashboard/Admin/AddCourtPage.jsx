@@ -102,7 +102,7 @@ const AddCourtPage = () => {
                   type="text"
                   {...register("name", { required: "Court name is required" })}
                   className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                  placeholder="e.g. Celebration Hall"
+                  placeholder="e.g. Events at Soni Blissful"
                 />
                 {errors.name && (
                   <p className="mt-1 text-sm text-red-400">
