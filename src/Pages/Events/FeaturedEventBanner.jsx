@@ -54,6 +54,10 @@ const sports = [
 const FlipCard = ({ sport }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
+  // WhatsApp message with event details
+  const whatsappMessage = `Hello! I'm interested in booking ${sport.name} decoration. Starting price: ${sport.price}. Please share more details.`;
+  const whatsappLink = `https://wa.me/918319594037?text=${encodeURIComponent(whatsappMessage)}`;
+
   return (
     <div className="w-full aspect-square" style={{ perspective: "1000px" }}>
       <div
@@ -142,7 +146,7 @@ const FlipCard = ({ sport }) => {
             </div>
 
             <div 
-              className="p-1 rounded text-center"
+              className="p-1 rounded text-center mb-1"
               style={{ backgroundColor: `${sport.color}20` }}
             >
               <p style={{ fontSize: '8px' }} className="text-gray-600">Starting from</p>
@@ -150,6 +154,24 @@ const FlipCard = ({ sport }) => {
                 {sport.price}
               </p>
             </div>
+
+            {/* Book Now Button */}
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="w-full py-1 rounded text-white font-bold text-center
+                        flex items-center justify-center gap-1 shadow-md
+                        hover:opacity-90 transition-opacity"
+              style={{ 
+                backgroundColor: sport.color,
+                fontSize: '9px'
+              }}
+            >
+              <span>📱</span>
+              <span>Book Now</span>
+            </a>
 
             <p style={{ fontSize: '8px' }} className="text-center text-gray-400 mt-1">
               Tap to flip back
@@ -193,7 +215,8 @@ const FeaturedSportsDecorated = () => {
             <Link
               to="/events"
               className="inline-flex items-center gap-1 px-3 py-1.5
-                        bg-gray-900 text-white font-bold rounded-lg shadow-lg"
+                        bg-gray-900 text-white font-bold rounded-lg shadow-lg
+                        hover:bg-gray-800 transition-colors"
               style={{ fontSize: '10px' }}
             >
               <span>View All Events</span>
@@ -208,15 +231,19 @@ const FeaturedSportsDecorated = () => {
         <a
           href="tel:8319594037"
           className="w-10 h-10 rounded-full bg-green-500 shadow-lg
-                    flex items-center justify-center text-lg border border-white"
+                    flex items-center justify-center text-lg border border-white
+                    hover:scale-110 transition-transform"
           aria-label="Call"
         >
           📞
         </a>
         <a
-          href="https://wa.me/8319594037"
+          href="https://wa.me/918319594037"
+          target="_blank"
+          rel="noopener noreferrer"
           className="w-10 h-10 rounded-full shadow-lg
-                    flex items-center justify-center text-lg border border-white"
+                    flex items-center justify-center text-lg border border-white
+                    hover:scale-110 transition-transform"
           style={{ backgroundColor: '#25D366' }}
           aria-label="WhatsApp"
         >
