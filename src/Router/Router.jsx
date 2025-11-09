@@ -29,6 +29,7 @@ import ManageCoupons from "../Pages/Dashboard/Admin/ManageCoupons";
 import Announcements from "../Pages/Dashboard/Member/Announcements";
 import ManageAnnouncement from "../Pages/Dashboard/Admin/ManageAnnouncement";
 import BookingsApproval from "../Pages/Dashboard/Admin/BookingsApproval";
+import ManageEvents from "../Pages/Dashboard/Admin/ManageEvents";
 import ApproveBookings from "../Pages/Dashboard/Member/ApproveBookings";
 import PaymentPage from "../Pages/Dashboard/Member/PaymentPage";
 import DashboardProfile from "../Pages/Dashboard/Shared/DashboardProfile";
@@ -79,6 +80,7 @@ const Router = createBrowserRouter([
       { path: "bookings/confirm", element: <ConfirmBookings /> },
       { path: "bookings/manage", element: <ManageBookings /> },
       { path: "users", element: <AllUsers /> },
+      { path: "events/manage", element: <ManageEvents /> },
   { path: "banners/add", element: <Suspense fallback={<div>Loading...</div>}><AddBanner /></Suspense> },
   { path: "banners", element: <Suspense fallback={<div>Loading...</div>}><ManageBanners /></Suspense> },
       { path: "announcements", element: <Announcements /> },

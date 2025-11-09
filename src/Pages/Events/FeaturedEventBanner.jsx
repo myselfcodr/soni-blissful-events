@@ -1,8 +1,25 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import api from "../../api/axiosInstance";
 
-const sports = [
+const [events, setEvents] = useState([]);
+
+useEffect(() => {
+  const fetchEvents = async () => {
+    try {
+      const response = await api.get('/events');
+      setEvents(response.data);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+  
+  fetchEvents();
+}, []);
+
+// Keeping one event as fallback if API fails
+const defaultEvents = [
   { 
     name: "Birthdays", 
     image: "/EventsImg/id 2.png",
@@ -202,8 +219,8 @@ const FeaturedSportsDecorated = () => {
           </motion.div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
-            {sports.map((sport, index) => (
-              <FlipCard key={index} sport={sport} />
+            {(events.length > 0 ? events : defaultEvents).map((event, index) => (
+              <FlipCard key={event._id || index} sport={event} />
             ))}
           </div>
 

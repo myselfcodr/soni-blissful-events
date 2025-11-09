@@ -112,6 +112,12 @@ const allNavItems = [
     icon: <FaEdit />,
     roles: ["admin"],
   },
+  {
+    name: "Manage Events",
+    path: "/dashboard/events/manage",
+    icon: <FaEdit />,
+    roles: ["admin"],
+  },
 ];
 
 const SidebarNavLink = () => {
