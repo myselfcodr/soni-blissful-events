@@ -3,6 +3,14 @@ import { motion } from 'framer-motion';
 import Swal from 'sweetalert2';
 import api from '../../../api/axiosInstance';
 
+// API endpoints
+const API_ENDPOINTS = {
+  list: '/api/events',
+  create: '/api/events',
+  update: (id) => `/api/events/${id}`,
+  delete: (id) => `/api/events/${id}`
+};
+
 const ManageEvents = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,55 +27,41 @@ const ManageEvents = () => {
 
   // Fetch events
   const fetchEvents = async () => {
-    const endpoints = ['/api/v1/events', '/events', '/events.json'];
     setLoading(true);
-    let loaded = false;
-
-    for (const ep of endpoints) {
-      try {
-        let response;
-        if (ep.endsWith('.json')) {
-          const res = await fetch(ep);
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data = await res.json();
-          setEvents(data);
-          loaded = true;
-          break;
-        } else {
-          response = await api.get(ep);
+    try {
+      const response = await api.get(API_ENDPOINTS.list);
+      if (response?.data) {
+        const eventsData = Array.isArray(response.data) ? response.data : 
+                          response.data.success && Array.isArray(response.data.data) ? response.data.data :
+                          response.data.events && Array.isArray(response.data.events) ? response.data.events : null;
+        
+        if (eventsData) {
+          setEvents(eventsData);
+          return;
         }
-
-        if (response && response.data) {
-          if (Array.isArray(response.data)) {
-            setEvents(response.data);
-            loaded = true;
-            break;
-          }
-          if (response.data.success && Array.isArray(response.data.data)) {
-            setEvents(response.data.data);
-            loaded = true;
-            break;
-          }
-          if (response.data.events && Array.isArray(response.data.events)) {
-            setEvents(response.data.events);
-            loaded = true;
-            break;
-          }
-        }
-      } catch (err) {
-        console.warn(`fetch events failed from ${ep}:`, err.message || err);
-        continue;
       }
-    }
-
-    if (!loaded) {
+      throw new Error('Invalid response format');
+    } catch (err) {
+      console.error('Failed to fetch events:', err.message || err);
       const msg = 'Unable to load events from server; showing defaults.';
-      console.error(msg);
-      Swal.fire({ icon: 'warning', title: 'Events unavailable', text: msg, timer: 2500, showConfirmButton: false });
-      setEvents([{ name: 'Default Event', image: '/EventsImg/id 2.png', color: '#10b981', icon: '🎉', services: ['Service A'], price: '₹0' }]);
+      Swal.fire({ 
+        icon: 'warning', 
+        title: 'Events unavailable', 
+        text: msg, 
+        timer: 2500, 
+        showConfirmButton: false 
+      });
+      setEvents([{ 
+        name: 'Default Event', 
+        image: '/EventsImg/id 2.png', 
+        color: '#10b981', 
+        icon: '🎉', 
+        services: ['Service A'], 
+        price: '₹0' 
+      }]);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -116,14 +110,14 @@ const ManageEvents = () => {
 
     try {
       if (editingEvent) {
-        const response = await api.put(`/api/v1/events/${editingEvent._id}`, formData);
+        const response = await api.put(API_ENDPOINTS.update(editingEvent._id), formData);
         if (response.data.success) {
           Swal.fire('Success', 'Event updated successfully', 'success');
         } else {
           throw new Error(response.data.message || 'Failed to update event');
         }
       } else {
-        const response = await api.post('/api/v1/events', formData);
+        const response = await api.post(API_ENDPOINTS.create, formData);
         if (response.data.success) {
           Swal.fire('Success', 'Event created successfully', 'success');
         } else {
@@ -169,7 +163,7 @@ const ManageEvents = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await api.delete(`/api/v1/events/${eventId}`);
+        const response = await api.delete(API_ENDPOINTS.delete(eventId));
         if (response.data.success) {
           Swal.fire('Deleted!', 'Event has been deleted.', 'success');
           fetchEvents();

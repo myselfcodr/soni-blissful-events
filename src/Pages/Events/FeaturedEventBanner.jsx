@@ -12,7 +12,12 @@ const FeaturedEventBanner = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const endpoints = ['/api/v1/events', '/events', '/events.json'];
+      // Try common API endpoint patterns
+      const endpoints = [
+        '/api/events',  // Express.js common pattern
+        '/api/v1/events', 
+        '/events'
+      ];
       let loaded = false;
 
       for (const ep of endpoints) {
