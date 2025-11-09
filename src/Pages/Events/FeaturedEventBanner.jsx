@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Swal from 'sweetalert2';
 import api from "../../api/axiosInstance";
 
 const FeaturedEventBanner = () => {
@@ -9,24 +10,65 @@ const FeaturedEventBanner = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      try {
-        const response = await api.get('/api/v1/events');
-        if (response.data.success) {
-          setEvents(response.data.data || []);
-        } else {
-          console.error('Failed to fetch events:', response.data.message);
+      const endpoints = ['/api/v1/events', '/events', '/events.json'];
+      let loaded = false;
+
+      for (const ep of endpoints) {
+        try {
+          // use axios for API-like endpoints, fetch for static json
+          let response;
+          if (ep.endsWith('.json')) {
+            // public file
+            const res = await fetch(ep);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            setEvents(data);
+            loaded = true;
+            break;
+          } else {
+            response = await api.get(ep);
+          }
+
+          // axios response handling
+          if (response && response.data) {
+            // common shapes: { success: true, data: [...] } or raw array
+            if (Array.isArray(response.data)) {
+              setEvents(response.data);
+              loaded = true;
+              break;
+            }
+            if (response.data.success && Array.isArray(response.data.data)) {
+              setEvents(response.data.data);
+              loaded = true;
+              break;
+            }
+            // try if server returns { events: [...] }
+            if (response.data.events && Array.isArray(response.data.events)) {
+              setEvents(response.data.events);
+              loaded = true;
+              break;
+            }
+          }
+        } catch (err) {
+          // try next endpoint
+          console.warn(`Failed to load from ${ep}:`, err.message || err);
+          continue;
         }
-      } catch (error) {
-        console.error('Error fetching events:', error.response?.data?.message || error.message);
-      } finally {
-        setLoading(false);
       }
+
+      if (!loaded) {
+        const msg = 'Unable to load events from server; showing defaults.';
+        console.error(msg);
+        Swal.fire({ icon: 'warning', title: 'Events unavailable', text: msg, timer: 2500, showConfirmButton: false });
+        setEvents(defaultEvents);
+      }
+
+      setLoading(false);
     };
-    
+
     fetchEvents();
   }, []);
 
-  // Keeping default events as fallback if API fails
   const defaultEvents = [
     { 
       name: "Birthdays", 
@@ -117,7 +159,6 @@ const FeaturedEventBanner = () => {
         </div>
       </section>
 
-      {/* Static Contact Links */}
       <div className="fixed bottom-2 right-2 z-50 flex flex-col gap-2">
         <a
           href="tel:8319594037"
@@ -145,11 +186,9 @@ const FeaturedEventBanner = () => {
   );
 };
 
-// Simple Flip Card Component
 const FlipCard = ({ sport }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // WhatsApp message with event details
   const whatsappMessage = `Hello! I'm interested in booking ${sport.name} decoration. Starting price: ${sport.price}. Please share more details.`;
   const whatsappLink = `https://wa.me/918319594037?text=${encodeURIComponent(whatsappMessage)}`;
 
@@ -250,7 +289,6 @@ const FlipCard = ({ sport }) => {
               </p>
             </div>
 
-            {/* Book Now Button */}
             <a
               href={whatsappLink}
               target="_blank"

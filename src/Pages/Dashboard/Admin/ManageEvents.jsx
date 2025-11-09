@@ -19,24 +19,55 @@ const ManageEvents = () => {
 
   // Fetch events
   const fetchEvents = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get('/api/v1/events');
-      if (response.data.success) {
-        setEvents(response.data.data || []);
-      } else {
-        throw new Error(response.data.message || 'Failed to fetch events');
+    const endpoints = ['/api/v1/events', '/events', '/events.json'];
+    setLoading(true);
+    let loaded = false;
+
+    for (const ep of endpoints) {
+      try {
+        let response;
+        if (ep.endsWith('.json')) {
+          const res = await fetch(ep);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          setEvents(data);
+          loaded = true;
+          break;
+        } else {
+          response = await api.get(ep);
+        }
+
+        if (response && response.data) {
+          if (Array.isArray(response.data)) {
+            setEvents(response.data);
+            loaded = true;
+            break;
+          }
+          if (response.data.success && Array.isArray(response.data.data)) {
+            setEvents(response.data.data);
+            loaded = true;
+            break;
+          }
+          if (response.data.events && Array.isArray(response.data.events)) {
+            setEvents(response.data.events);
+            loaded = true;
+            break;
+          }
+        }
+      } catch (err) {
+        console.warn(`fetch events failed from ${ep}:`, err.message || err);
+        continue;
       }
-    } catch (error) {
-      console.error('Error fetching events:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Failed to fetch events',
-        text: error.response?.data?.message || error.message || 'Could not connect to the server',
-      });
-    } finally {
-      setLoading(false);
     }
+
+    if (!loaded) {
+      const msg = 'Unable to load events from server; showing defaults.';
+      console.error(msg);
+      Swal.fire({ icon: 'warning', title: 'Events unavailable', text: msg, timer: 2500, showConfirmButton: false });
+      setEvents([{ name: 'Default Event', image: '/EventsImg/id 2.png', color: '#10b981', icon: '🎉', services: ['Service A'], price: '₹0' }]);
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {
