@@ -7,6 +7,8 @@ import api from "../../api/axiosInstance";
 const FeaturedEventBanner = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [lastAttempt, setLastAttempt] = useState(null);
+  const [lastResult, setLastResult] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -14,6 +16,7 @@ const FeaturedEventBanner = () => {
       let loaded = false;
 
       for (const ep of endpoints) {
+        setLastAttempt(ep);
         try {
           // use axios for API-like endpoints, fetch for static json
           let response;
@@ -23,6 +26,7 @@ const FeaturedEventBanner = () => {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
             setEvents(data);
+            setLastResult({ endpoint: ep, ok: true, type: 'json', length: Array.isArray(data) ? data.length : null });
             loaded = true;
             break;
           } else {
@@ -34,17 +38,20 @@ const FeaturedEventBanner = () => {
             // common shapes: { success: true, data: [...] } or raw array
             if (Array.isArray(response.data)) {
               setEvents(response.data);
+              setLastResult({ endpoint: ep, ok: true, type: 'array', length: response.data.length });
               loaded = true;
               break;
             }
             if (response.data.success && Array.isArray(response.data.data)) {
               setEvents(response.data.data);
+              setLastResult({ endpoint: ep, ok: true, type: 'data', length: response.data.data.length });
               loaded = true;
               break;
             }
             // try if server returns { events: [...] }
             if (response.data.events && Array.isArray(response.data.events)) {
               setEvents(response.data.events);
+              setLastResult({ endpoint: ep, ok: true, type: 'events', length: response.data.events.length });
               loaded = true;
               break;
             }
@@ -52,6 +59,7 @@ const FeaturedEventBanner = () => {
         } catch (err) {
           // try next endpoint
           console.warn(`Failed to load from ${ep}:`, err.message || err);
+          setLastResult({ endpoint: ep, ok: false, error: err.message || String(err) });
           continue;
         }
       }
@@ -139,6 +147,15 @@ const FeaturedEventBanner = () => {
               <FlipCard key={event._id || index} sport={event} />
             ))}
           </div>
+
+            {/* Debug panel (visible in dev or with ?debugEvents=1) */}
+            {(import.meta.env && import.meta.env.DEV) || new URLSearchParams(window.location.search).get('debugEvents') ? (
+              <div className="mt-4 p-3 text-xs bg-yellow-50 border border-yellow-200 text-yellow-800 rounded">
+                <div><strong>Events debug</strong></div>
+                <div>Last attempted endpoint: <code>{lastAttempt || '—'}</code></div>
+                <div>Last result: <code>{lastResult ? JSON.stringify(lastResult) : '—'}</code></div>
+              </div>
+            ) : null}
 
           <motion.div
             initial={{ opacity: 0 }}
