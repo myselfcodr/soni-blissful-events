@@ -73,7 +73,7 @@ const AddCourtPage = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white font-serif">
-            Add New Court
+            Add New Events
           </h1>
           <p className="mt-2 text-lg text-gray-400">
             Fill in the details to add a Premium Events to Soni Blissful Events
