@@ -114,7 +114,7 @@ const allNavItems = [
   },
   {
     name: "Add Premium Events",
-    path: "/dashboard/banners/EditEvent",
+    path: "/dashboard/EditEvent",
     icon: <FaEdit />,
     roles: ["admin"],
   },
