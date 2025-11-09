@@ -9,10 +9,9 @@ import {
   FiTag,
   FiCheckSquare,
 } from "react-icons/fi";
-import { MdCampaign, MdOutlineManageAccounts } from "react-icons/md";
+import { MdCampaign, MdOutlineManageAccounts, MdEventNote, MdAddCircleOutline } from "react-icons/md";
 import { AuthContext } from "../../Provider/AuthProvider";
 import useUserRole from "../../hooks/useUserRole";
-
 import { FaImage, FaEdit } from "react-icons/fa";
 
 const allNavItems = [
@@ -112,10 +111,17 @@ const allNavItems = [
     icon: <FaEdit />,
     roles: ["admin"],
   },
+  // ✅ NEW EVENT MANAGEMENT ITEMS
   {
-    name: "Add Premium Events",
-    path: "/dashboard/EditEvent",
-    icon: <FaEdit />,
+    name: "Manage Events",
+    path: "/dashboard/events",
+    icon: <MdEventNote />,
+    roles: ["admin"],
+  },
+  {
+    name: "Add Event",
+    path: "/dashboard/events/add",
+    icon: <MdAddCircleOutline />,
     roles: ["admin"],
   },
 ];

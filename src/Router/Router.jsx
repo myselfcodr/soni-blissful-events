@@ -37,8 +37,14 @@ import ManageBookings from "../Pages/Dashboard/Admin/ManageBookings";
 import PaymentHistory from "../Pages/Dashboard/Member/PaymentHistory";
 import Overview from "../Pages/Dashboard/Shared/Overview/overview";
 
+// Lazy loaded components
 const AddBanner = React.lazy(() => import("../Pages/Dashboard/Admin/AddBanner.jsx"));
 const ManageBanners = React.lazy(() => import("../Pages/Dashboard/Admin/ManageBanners.jsx"));
+
+// ✅ EVENT MANAGEMENT - Lazy load karo
+const ManageEvents = React.lazy(() => import("../Pages/Dashboard/Admin/ManageEvents.jsx"));
+const AddEvent = React.lazy(() => import("../Pages/Dashboard/Admin/AddEvent.jsx"));
+const EditEvent = React.lazy(() => import("../Pages/Dashboard/Admin/EditEvent.jsx"));
 
 const Router = createBrowserRouter([
   {
@@ -79,12 +85,56 @@ const Router = createBrowserRouter([
       { path: "bookings/confirm", element: <ConfirmBookings /> },
       { path: "bookings/manage", element: <ManageBookings /> },
       { path: "users", element: <AllUsers /> },
-  { path: "banners/add", element: <Suspense fallback={<div>Loading...</div>}><AddBanner /></Suspense> },
-  { path: "banners", element: <Suspense fallback={<div>Loading...</div>}><ManageBanners /></Suspense> },
+      { path: "coupons/manage", element: <ManageCoupons /> },
+      
+      // Banner routes
+      { 
+        path: "banners/add", 
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AddBanner />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "banners", 
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <ManageBanners />
+          </Suspense>
+        ) 
+      },
+      
+      // ✅ EVENT MANAGEMENT ROUTES - Add karo
+      { 
+        path: "events", 
+        element: (
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-white">Loading events...</div></div>}>
+            <ManageEvents />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "events/add", 
+        element: (
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-white">Loading form...</div></div>}>
+            <AddEvent />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "events/edit/:id", 
+        element: (
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-white">Loading event data...</div></div>}>
+            <EditEvent />
+          </Suspense>
+        ) 
+      },
+      
       { path: "announcements", element: <Announcements /> },
-  { path: "announcements/manage", element: <ManageAnnouncement /> },
-  // Removed invalid import expressions; use React.lazy and Suspense above instead.
-  { path: "payment/:bookingId", element: <PaymentPage /> },
+      { path: "announcements/manage", element: <ManageAnnouncement /> },
+      { path: "payment/:bookingId", element: <PaymentPage /> },
+      { path: "payments/history", element: <PaymentHistory /> },
     ],
   },
 ]);
