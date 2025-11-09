@@ -272,9 +272,9 @@ const ManageEvents = () => {
           <button
             type="submit"
             disabled={loading}
-            className={\`px-6 py-2 bg-blue-500 text-white rounded-md \${
+            className={`px-6 py-2 bg-blue-500 text-white rounded-md ${
               loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
-            }\`}
+            }`}
           >
             {loading ? 'Saving...' : editingEvent ? 'Update Event' : 'Add Event'}
           </button>
