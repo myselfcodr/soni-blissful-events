@@ -23,7 +23,7 @@ const allNavItems = [
     roles: ["admin", "member", "user"],
   },
   {
-    name: "Add Court",
+    name: "Add Events",
     path: "/dashboard/courts/add",
     icon: <FiPlusSquare />,
     roles: ["admin"],
@@ -108,6 +108,12 @@ const allNavItems = [
   },
   {
     name: "Add Banner",
+    path: "/dashboard/banners/add",
+    icon: <FaEdit />,
+    roles: ["admin"],
+  },
+  {
+    name: "Add Premium Events",
     path: "/dashboard/banners/add",
     icon: <FaEdit />,
     roles: ["admin"],
