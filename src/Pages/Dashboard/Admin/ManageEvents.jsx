@@ -20,11 +20,22 @@ const ManageEvents = () => {
   // Fetch events
   const fetchEvents = async () => {
     try {
-      const response = await api.get('/events');
-      setEvents(response.data);
+      setLoading(true);
+      const response = await api.get('/api/v1/events');
+      if (response.data.success) {
+        setEvents(response.data.data || []);
+      } else {
+        throw new Error(response.data.message || 'Failed to fetch events');
+      }
     } catch (error) {
       console.error('Error fetching events:', error);
-      Swal.fire('Error', 'Failed to fetch events', 'error');
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed to fetch events',
+        text: error.response?.data?.message || error.message || 'Could not connect to the server',
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,11 +85,19 @@ const ManageEvents = () => {
 
     try {
       if (editingEvent) {
-        await api.put(`/events/${editingEvent._id}`, formData);
-        Swal.fire('Success', 'Event updated successfully', 'success');
+        const response = await api.put(`/api/v1/events/${editingEvent._id}`, formData);
+        if (response.data.success) {
+          Swal.fire('Success', 'Event updated successfully', 'success');
+        } else {
+          throw new Error(response.data.message || 'Failed to update event');
+        }
       } else {
-        await api.post('/events', formData);
-        Swal.fire('Success', 'Event created successfully', 'success');
+        const response = await api.post('/api/v1/events', formData);
+        if (response.data.success) {
+          Swal.fire('Success', 'Event created successfully', 'success');
+        } else {
+          throw new Error(response.data.message || 'Failed to create event');
+        }
       }
       
       fetchEvents();
@@ -119,12 +138,20 @@ const ManageEvents = () => {
 
     if (result.isConfirmed) {
       try {
-        await api.delete(`/events/${eventId}`);
-        Swal.fire('Deleted!', 'Event has been deleted.', 'success');
-        fetchEvents();
+        const response = await api.delete(`/api/v1/events/${eventId}`);
+        if (response.data.success) {
+          Swal.fire('Deleted!', 'Event has been deleted.', 'success');
+          fetchEvents();
+        } else {
+          throw new Error(response.data.message || 'Failed to delete event');
+        }
       } catch (error) {
         console.error('Error deleting event:', error);
-        Swal.fire('Error', 'Failed to delete event', 'error');
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to delete event',
+          text: error.response?.data?.message || error.message || 'Could not delete the event',
+        });
       }
     }
   };
