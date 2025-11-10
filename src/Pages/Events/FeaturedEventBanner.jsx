@@ -4,131 +4,83 @@ import { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 import api from "../../api/axiosInstance";
 
+// API endpoints
+const API_ENDPOINTS = {
+  list: '/api/events',
+  create: '/api/events',
+  update: (id) => `/api/events/${id}`,
+  delete: (id) => `/api/events/${id}`
+};
+
+// Default events to show if API fails
+const defaultEvents = [
+  { 
+    name: "Birthdays", 
+    image: "/EventsImg/id 2.png",
+    color: "#10b981"
+  }
+];
+
 const FeaturedEventBanner = () => {
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [lastAttempt, setLastAttempt] = useState(null);
   const [lastResult, setLastResult] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
-      // Try common API endpoint patterns
-      const endpoints = [
-        '/api/events',  // Express.js common pattern
-        '/api/v1/events', 
-        '/events'
-      ];
-      let loaded = false;
+      setLoading(true);
+      setLastAttempt(API_ENDPOINTS.list);
 
-      for (const ep of endpoints) {
-        setLastAttempt(ep);
-        try {
-          // use axios for API-like endpoints, fetch for static json
-          let response;
-          if (ep.endsWith('.json')) {
-            // public file
-            const res = await fetch(ep);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            setEvents(data);
-            setLastResult({ endpoint: ep, ok: true, type: 'json', length: Array.isArray(data) ? data.length : null });
-            loaded = true;
-            break;
-          } else {
-            response = await api.get(ep);
-          }
+      try {
+        const response = await api.get(API_ENDPOINTS.list);
 
-          // axios response handling
-          if (response && response.data) {
-            // common shapes: { success: true, data: [...] } or raw array
-            if (Array.isArray(response.data)) {
-              setEvents(response.data);
-              setLastResult({ endpoint: ep, ok: true, type: 'array', length: response.data.length });
-              loaded = true;
-              break;
-            }
-            if (response.data.success && Array.isArray(response.data.data)) {
-              setEvents(response.data.data);
-              setLastResult({ endpoint: ep, ok: true, type: 'data', length: response.data.data.length });
-              loaded = true;
-              break;
-            }
-            // try if server returns { events: [...] }
-            if (response.data.events && Array.isArray(response.data.events)) {
-              setEvents(response.data.events);
-              setLastResult({ endpoint: ep, ok: true, type: 'events', length: response.data.events.length });
-              loaded = true;
-              break;
-            }
+        if (response?.data) {
+          // Handle different response formats
+          const eventsData = Array.isArray(response.data) ? response.data :
+            response.data.success && Array.isArray(response.data.data) ? response.data.data :
+            response.data.events && Array.isArray(response.data.events) ? response.data.events : null;
+
+          if (eventsData) {
+            setEvents(eventsData);
+            setLastResult({
+              endpoint: API_ENDPOINTS.list,
+              ok: true,
+              type: 'success',
+              length: eventsData.length
+            });
+            return;
           }
-        } catch (err) {
-          // try next endpoint
-          console.warn(`Failed to load from ${ep}:`, err.message || err);
-          setLastResult({ endpoint: ep, ok: false, error: err.message || String(err) });
-          continue;
         }
-      }
+        throw new Error('Invalid response format');
+      } catch (err) {
+        console.error('Failed to fetch events:', err.message || err);
+        setLastResult({
+          endpoint: API_ENDPOINTS.list,
+          ok: false,
+          error: err.message || String(err)
+        });
 
-      if (!loaded) {
         const msg = 'Unable to load events from server; showing defaults.';
         console.error(msg);
-        Swal.fire({ icon: 'warning', title: 'Events unavailable', text: msg, timer: 2500, showConfirmButton: false });
+        Swal.fire({
+          icon: 'warning',
+          title: 'Events unavailable',
+          text: msg,
+          timer: 2500,
+          showConfirmButton: false
+        });
         setEvents(defaultEvents);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
+    // Call the fetch function once on mount
     fetchEvents();
   }, []);
 
-  const defaultEvents = [
-    { 
-      name: "Birthdays", 
-      image: "/EventsImg/id 2.png",
-      color: "#10b981",
-      icon: "🎂",
-      tagline: "Magical Celebrations",
-      services: ["Theme Decor", "Balloon Art", "LED Lights", "Photo Booth", "Backdrop Setup", "Party Props", "Cake Table", "Gift Corner"],
-      price: "₹15,000"
-    },
-    { 
-      name: "Weddings", 
-      image: "/EventsImg/id1.jpg",
-      color: "#f43f5e",
-      icon: "💍",
-      tagline: "Dream Wedding Moments",
-      services: ["Stage Setup", "Floral Decor", "Mandap Design", "Lighting", "Entry Gate", "Seating Arrangements", "Canopy Setup", "Red Carpet"],
-      price: "₹50,000"
-    },
-    { 
-      name: "Anniversaries", 
-      image: "https://i.postimg.cc/nzcBCc1L/premium-photo-1666913667082-c1fecc45275d-w-600-auto-format-fit-crop-q-60-ixlib-rb-4-1.jpg",
-      color: "#f59e0b",
-      icon: "💝",
-      tagline: "Romantic Celebrations",
-      services: ["Candle Setup", "Flower Walls", "Table Decor", "Ambience", "Romantic Lighting", "Photo Corner", "Flower Petals", "Music Setup"],
-      price: "₹20,000"
-    },
-    { 
-      name: "Baby Showers", 
-      image: "https://i.postimg.cc/90D9Y8K5/photo-1530549387789-4c1017266635-q-80-w-1170-auto-format-fit-crop-q-60-ixlib-rb-4-1.jpg",
-      color: "#3b82f6",
-      icon: "👶",
-      tagline: "Welcome New Life",
-      services: ["Cute Themes", "Balloon Arch", "Props", "Cake Table", "Name Banner", "Mom-to-Be Chair", "Games Corner", "Welcome Board"],
-      price: "₹18,000"
-    },
-    { 
-      name: "Corporate Events", 
-      image: "https://i.postimg.cc/N0QrzfSx/photo-1624897174291-1bd715e371d5-w-600-auto-format-fit-crop-q-60-ixlib-rb-4-1.jpg",
-      color: "#8b5cf6",
-      icon: "🏢",
-      tagline: "Professional Excellence",
-      services: ["Stage Design", "Branding", "Audio Visual", "Seating", "Registration Desk", "Standees", "LED Screens", "Podium Setup"],
-      price: "₹35,000"
-    },
-  ];
+
 
   return (
     <>
